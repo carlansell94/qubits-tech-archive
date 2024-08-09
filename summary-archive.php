@@ -1,14 +1,15 @@
 <?php
 /**
- * Plugin Name:       Qubits Tech Archive
+ * Plugin Name:       Summary Archive
  * Description:       A post archive using HTML summary drop-down elements.
- * Requires at least: 5.9
+ * Requires at least: 6.1
  * Requires PHP:      7.0
  * Version:           0.1.0
- * Author:            Qubits Tech
+ * Author:            Carl Ansell
+ * Author URI:        https://carlansell.co.uk
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain:       qubits-tech-archive
+ * Text Domain:       qb-summary-archive
  */
 
 function qb_tech_archive_render($attributes)

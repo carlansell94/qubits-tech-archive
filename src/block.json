@@ -1,9 +1,9 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 2,
-	"name": "carlansell94/qubits-tech-archive",
+	"apiVersion": 3,
+	"name": "carlansell94/summary-archive",
 	"version": "0.1.0",
-	"title": "Qubits Tech Archive",
+	"title": "Summary Archive",
 	"category": "widgets",
 	"icon": "archive",
 	"description": "A post archive using HTML summary drop-down elements.",
@@ -18,7 +18,7 @@
 			"default": false
 		}
 	},
-	"textdomain": "qubits-tech-archive",
+	"textdomain": "qb-summary-archive",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css"

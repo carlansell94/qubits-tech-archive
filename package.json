@@ -1,8 +1,8 @@
 {
-	"name": "qubits-tech-archive",
+	"name": "summary-archive",
 	"version": "0.1.0",
 	"description": "A post archive using HTML summary drop-down elements.",
-	"author": "Qubits Tech",
+	"author": "Carl Ansell",
 	"license": "GPL-3.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
@@ -15,7 +15,6 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@wordpress/eslint-plugin": "^13.3.0",
 		"@wordpress/scripts": "^24.3.0"
 	}
 }
