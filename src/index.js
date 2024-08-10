@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: © 2022-2024 Carl Ansell <github@carlansell.co.uk>
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 const { registerBlockType } = wp.blocks;
 const { PanelBody, ToggleControl } = wp.components;
 const { InspectorControls, useBlockProps } = wp.blockEditor;
