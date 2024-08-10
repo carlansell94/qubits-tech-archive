@@ -12,7 +12,7 @@
  * Text Domain:       qb-summary-archive
  */
 
-function qb_tech_archive_render($attributes)
+function summary_archive_render($attributes)
 {
 	$archive = array();
 	$result = new WP_Query(array('posts_per_page' => -1));
@@ -20,10 +20,10 @@ function qb_tech_archive_render($attributes)
 	while ($result->have_posts()): $result->the_post();
 		$year = get_the_date('Y');
 		$month = get_the_date('M');
-		$url = get_permalink();
-		$title = get_the_title(); 
-			
-		$archive[$year][$month][$url] = $title;
+		$archive[$year][$month][] = [
+			'url' => get_permalink(),
+			'title' => get_the_title()
+		];
 	endwhile;
 
 	wp_reset_postdata();
@@ -35,36 +35,38 @@ function qb_tech_archive_render($attributes)
 	<?php endif;
 
 	foreach ($archive as $year => $months): ?>
-		<details>
-			<summary><?= $year ?></summary>
-			<?php foreach ($months as $month => $posts): ?>
-				<details>
-					<summary><?= $month ?>
-						<?php if ($attributes['showPostCounts']): ?>
-							(<?= count($posts) ?>)
-						<?php endif; ?>
-					</summary>
-					<ul>
-						<?php foreach ($posts as $url => $title): ?>
-							<li>
-								<a href="<?= $url ?>"><?= $title ?></a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</details>
-			<?php endforeach; ?>
-		</details>
+		<div class="wp-block-carlansell94-summary-archive-container">
+			<details>
+				<summary><?= $year ?></summary>
+				<?php foreach ($months as $month => $posts): ?>
+					<details>
+						<summary><?= $month ?>
+							<?php if ($attributes['showPostCounts']): ?>
+								(<?= count($posts) ?>)
+							<?php endif; ?>
+						</summary>
+						<ul>
+							<?php foreach ($posts as $post): ?>
+								<li>
+									<a href="<?= $post['url'] ?>"><?= $post['title'] ?></a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</details>
+				<?php endforeach; ?>
+			</details>
+		</div>
 	<?php endforeach;
 }
 
-function qb_tech_archive_init()
+function summary_archive_init()
 {
 	register_block_type_from_metadata(
 		__DIR__ . '/build',
 		array(
-			'render_callback' => 'qb_tech_archive_render',
+			'render_callback' => 'summary_archive_render',
 		)
 	);
 }
 
-add_action( 'init', 'qb_tech_archive_init' );
+add_action( 'init', 'summary_archive_init' );
