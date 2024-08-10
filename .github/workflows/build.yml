@@ -1,0 +1,70 @@
+name: Build Extension
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build and package extension
+              run: npm run build && npm run plugin-zip
+
+            - name: Install and authenticate GitHub CLI
+              run: sudo apt-get install -y gh &&
+                  gh auth login --with-token <<< ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Set environment variables
+              id: set_env
+              run:
+                  echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV &&
+                  echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+            - name: Get all releases and delete pre-releases
+              id: get_releases_and_delete_prereleases
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const { data: releases } = await github.rest.repos.listReleases({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo
+                      });
+                      for (const release of releases) {
+                        if (release.prerelease) {
+                          await github.rest.repos.deleteRelease({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            release_id: release.id
+                          });
+                          await github.rest.git.deleteRef({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            ref: `tags/${release.tag_name}`
+                          });
+                        }
+                      }
+
+            - name: Create GitHub release
+              id: create_release
+              run: |
+                  if git show-ref --tags --verify --quiet "refs/tags/v${{ env.VERSION }}"; then
+                    gh release create -p "v${{ env.VERSION }}-${{ env.COMMIT_HASH }}" summary-archive.zip --title "v${{ env.VERSION }}-${{ env.COMMIT_HASH }}" --generate-notes
+                  else
+                    gh release create "v${{ env.VERSION }}" summary-archive.zip --title "v${{ env.VERSION }}" --generate-notes
+                  fi
