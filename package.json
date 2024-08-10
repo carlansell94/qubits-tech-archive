@@ -1,6 +1,6 @@
 {
 	"name": "summary-archive",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "A post archive using HTML summary drop-down elements.",
 	"author": "Carl Ansell",
 	"license": "GPL-3.0-or-later",

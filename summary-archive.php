@@ -4,7 +4,7 @@
  * Description:       A post archive using HTML summary drop-down elements.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           0.1.0
+ * Version:           0.2.0
  * Author:            Carl Ansell
  * Author URI:        https://carlansell.co.uk
  * License:           GPL-3.0-or-later
