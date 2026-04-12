@@ -14,6 +14,7 @@
 
 function summary_archive_render($attributes)
 {
+	wp_enqueue_style('summary-archive-style');
 	ob_start();
 
 	$archive = array();
@@ -31,7 +32,7 @@ function summary_archive_render($attributes)
 
 	wp_reset_postdata();
 
-	if ($attributes['showTitle']): ?>
+	if (!empty($attributes['showTitle'])): ?>
 		<div class="widget-block">
 			<h3>Archive</h3>
 		</div>
@@ -44,7 +45,7 @@ function summary_archive_render($attributes)
 				<?php foreach ($months as $month => $posts) : ?>
 					<details>
 						<summary><?php echo esc_html($month); ?>
-							<?php if ($attributes['showPostCounts']): ?>
+								<?php if (!empty($attributes['showPostCounts'])): ?>
 								(<?php echo esc_html((string) count($posts)); ?>)
 							<?php endif; ?>
 						</summary>
@@ -59,13 +60,20 @@ function summary_archive_render($attributes)
 				<?php endforeach; ?>
 			</details>
 		</div>
-	<?php endforeach;
+		<?php endforeach;
 
 	return ob_get_clean();
 }
 
 function summary_archive_init()
 {
+	wp_register_style(
+		'summary-archive-style',
+		plugins_url('build/style-index.css', __FILE__),
+		array(),
+		'0.2.0'
+	);
+
 	register_block_type_from_metadata(
 		__DIR__ . '/build',
 		array(
