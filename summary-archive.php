@@ -14,16 +14,19 @@
 
 function summary_archive_render($attributes)
 {
+	ob_start();
+
 	$archive = array();
 	$result = new WP_Query(array('posts_per_page' => -1));
 
-	while ($result->have_posts()): $result->the_post();
+	while ($result->have_posts()):
+		$result->the_post();
 		$year = get_the_date('Y');
 		$month = get_the_date('M');
-		$archive[$year][$month][] = [
+		$archive[$year][$month][] = array(
 			'url' => get_permalink(),
-			'title' => get_the_title()
-		];
+			'title' => get_the_title(),
+		);
 	endwhile;
 
 	wp_reset_postdata();
@@ -37,18 +40,18 @@ function summary_archive_render($attributes)
 	foreach ($archive as $year => $months): ?>
 		<div class="wp-block-carlansell94-summary-archive-container">
 			<details>
-				<summary><?= $year ?></summary>
-				<?php foreach ($months as $month => $posts): ?>
+				<summary><?php echo esc_html($year); ?></summary>
+				<?php foreach ($months as $month => $posts) : ?>
 					<details>
-						<summary><?= $month ?>
+						<summary><?php echo esc_html($month); ?>
 							<?php if ($attributes['showPostCounts']): ?>
-								(<?= count($posts) ?>)
+								(<?php echo esc_html((string) count($posts)); ?>)
 							<?php endif; ?>
 						</summary>
 						<ul>
 							<?php foreach ($posts as $post): ?>
 								<li>
-									<a href="<?= $post['url'] ?>"><?= $post['title'] ?></a>
+									<a href="<?php echo esc_url($post['url']); ?>"><?php echo esc_html($post['title']); ?></a>
 								</li>
 							<?php endforeach; ?>
 						</ul>
@@ -57,6 +60,8 @@ function summary_archive_render($attributes)
 			</details>
 		</div>
 	<?php endforeach;
+
+	return ob_get_clean();
 }
 
 function summary_archive_init()

@@ -1,9 +1,10 @@
-// SPDX-FileCopyrightText: © 2022-2024 Carl Ansell <github@carlansell.co.uk>
+// SPDX-FileCopyrightText: © 2022-2026 Carl Ansell <github@carlansell.co.uk>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 const { registerBlockType } = wp.blocks;
 const { PanelBody, ToggleControl } = wp.components;
 const { InspectorControls, useBlockProps } = wp.blockEditor;
+const { decodeEntities } = wp.htmlEntities;
 const { useSelect } = wp.data;
 const { __ } = wp.i18n;
 
@@ -109,11 +110,11 @@ const Edit = ( { attributes, setAttributes } ) => {
 								<ul>
 									{ monthGroup.posts.map( ( post ) => (
 										<li key={ post.id }>
-											<span
-												dangerouslySetInnerHTML={ {
-													__html: post.title.rendered,
-												} }
-											/>
+											<span>
+												{ decodeEntities(
+													post.title.rendered
+												) }
+											</span>
 										</li>
 									) ) }
 								</ul>
